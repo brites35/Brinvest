@@ -1,0 +1,51 @@
+.navbar{
+    padding: 0.6rem 1.4rem;
+    font-weight: 400;
+    background-color: #b8b8b8 !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    font-size: 2rem;
+    font-weight: 500;
+}
+
+.nav-link {
+    font-size: 1.2rem;
+    color: #000000 !important;
+    margin-left: 1rem;
+}
+
+.vertical-navbar {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 235px; /* or any width you want */
+    background: #e3e3e3;
+    padding: 1rem;
+    padding-top: 1.5rem;
+}
+
+.vertical-navbar .nav-link {
+    color: #333;
+    padding: 0.5rem 0.5rem;
+    margin-top: 0.7rem;
+    text-decoration: none;
+}
+
+.vertical-navbar .nav-link:hover {
+    background: #c7c7c7;
+}
+
+@media (max-width: 576px) {
+  .navbar {
+    min-height: 35px; /* or any height you prefer */
+    padding: 0.2rem 0.4rem; /* reduce padding */
+  }
+  .navbar-nav .nav-link {
+    font-size: 1.1rem;
+  }
+  .navbar-brand {
+    font-size: 1.5rem;
+  }
+}
