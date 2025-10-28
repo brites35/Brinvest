@@ -7,11 +7,12 @@
         <title>{% block title %}Brinvest{% endblock %}</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link href="{% static 'Brinvest/styles.css' %}" rel="stylesheet">
+
     </head>
     <body>
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Brinvest</a>
+            <a class="navbar-brand" href="{% url 'index' %}">Brinvest</a>
             <ul class="navbar-nav ml-auto d-flex flex-row">
                 {% if user.is_authenticated %}
                     <li class="nav-item">
@@ -37,19 +38,21 @@
         <div class="mainbox" style="display: flex; gap: 20px;">
 
             <nav class="vertical-navbar">
-                <a class="nav-link" href="#">Stocks</a>
-                <a class="nav-link" href="#">ETFs</a>
-                <a class="nav-link" href="#">Wacthlist</a>
-                <a class="nav-link" href="#">Currency Converter</a>
-                <a class="nav-link" href="#">News</a>
+                <label class="nav-link" id="stocks_button">Stocks</label>
+                <label class="nav-link" id="etfs_button">ETFs</label>
+                {% if user.is_authenticated %}
+                    <label class="nav-link" id="watchlist_button">Wacthlist</label>
+                {% endif %}
+                <label class="nav-link" id="currency_button">Currency Converter</label>
+                <label class="nav-link" id="news_button">News</label>
             </nav>
 
 
-            <div class="body" style="margin: 30px;">
+            <div class="body content-area">
                 {% block body %}
                 {% endblock %}
             </div>
         </div>
-
+        {% block script %}{% endblock %}
     </body>
 </html>

@@ -1,5 +1,77 @@
 {% extends "Brinvest/layout.html" %}
+{% load static %}
 
 {% block body %}
-    TODO
+    <div id="Main_page" style="display: block;">
+
+        <div id="search-box">
+            <input type="text" id="stock-search-input" placeholder="Search for stocks/etfs...">
+        </div>
+
+        <div id="tops_container">
+            <div class="tops-row">
+                <div class="tops-block" id="Stocks-block">
+                    <h2>Top Stocks</h2>
+                    <table class="tops-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 20%;">Symbol</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- rows will be injected here -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tops-block" id="ETFs-block">
+                    <h2>Top ETFs</h2>
+                    <table class="tops-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 20%;">Symbol</th>
+                                <th>Name</th>
+                                <th>Weight</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- rows will be injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+
+    </div>
+
+    <div id="Stocks_page" style="display: none;">
+
+    </div>
+
+    <div id="Etfs_page" style="display: none;">
+
+    </div>
+
+    <div id="Watchlist_page" style="display: none;">
+    
+    </div>
+
+    <div id="Currency_page" style="display: none;">
+
+    </div>
+
+    <div id="News_page" style="display: none;">
+
+    </div>
+
+
+{% endblock %}
+
+{% block script %}
+    <script>
+        window.currentUser = "{{ request.user.username|escapejs }}";
+    </script>
+    <script src="{% static 'Brinvest/Brinvest.js' %}"></script>
 {% endblock %}

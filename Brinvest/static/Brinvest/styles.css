@@ -19,8 +19,7 @@
 .vertical-navbar {
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    width: 235px; /* or any width you want */
+    width: 235px;
     background: #e3e3e3;
     padding: 1rem;
     padding-top: 1.5rem;
@@ -35,12 +34,19 @@
 
 .vertical-navbar .nav-link:hover {
     background: #c7c7c7;
+    cursor: pointer;
+    user-select: none;
+}
+
+.vertical-navbar .nav-link:active {
+  transform: translateY(1px);
+  opacity: 0.95;
 }
 
 @media (max-width: 576px) {
   .navbar {
-    min-height: 35px; /* or any height you prefer */
-    padding: 0.2rem 0.4rem; /* reduce padding */
+    min-height: 35px; 
+    padding: 0.2rem 0.4rem; 
   }
   .navbar-nav .nav-link {
     font-size: 1.1rem;
@@ -48,4 +54,126 @@
   .navbar-brand {
     font-size: 1.5rem;
   }
+}
+
+/* Center login form */
+.mainbox{
+  height: calc(100vh - 78px); 
+}
+
+/* Ensure base elements take full height and avoid double 100vh causing scroll */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.content-area{
+  flex: 1 1 auto;
+  display: flex;
+  padding: 25px;
+}
+
+/* Full viewport centering for login/register pages */
+.login-container.full-center {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  background: rgba(255,255,255,0.6); /* slight overlay to separate from background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.login-box {
+  width: 100%;
+  max-width: 420px;
+  background: #fff; 
+  padding: 1.5rem;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.5);
+}
+
+.login-box .form-control:focus,
+.login-box input:focus,
+.login-box .btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.07rem rgba(0,0,0,0.5) !important;
+  border-color: #000 !important;
+}
+
+@media (max-width: 576px) {
+  .login-box {
+    padding: 1rem;
+    max-width: 95%;
+  }
+}
+
+#Main_page{
+  display: flex;
+  width: 100%;
+}
+
+#search-box{
+  min-width: 300px;
+  width: 30%;
+  box-sizing: border-box;
+  margin-left: 0; 
+}
+
+@media (max-width: 576px){
+  #search-box{ 
+    width: 100%;
+    min-width: unset; 
+  }
+}
+
+#stock-search-input{
+  width: 100%;
+  height: 35px;
+  box-sizing: border-box;
+}
+
+#tops_container{
+  margin-top: 50px;
+}
+
+
+.tops-row{
+  display: flex;
+  gap: 20px;
+}
+
+.tops-row > h2{
+  font-size: 1.8rem;
+  flex: 1 1 0;      
+  text-align: left;
+}
+
+@media (max-width: 768px){
+  .tops-row{
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .tops-row > h2{ text-align: left;}
+}
+
+.tops-block{
+  padding: 12px;
+  flex: 1 1 0;
+}
+
+.tops-table{
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+.tops-table th, .tops-table td{
+  padding: 8px 6px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+@media (max-width: 768px){
+  .tops-block{ margin-bottom: 12px; }
 }
