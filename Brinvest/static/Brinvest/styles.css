@@ -3,6 +3,27 @@
     font-weight: 400;
     background-color: #b8b8b8 !important;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1030;
+}
+
+/* layout variables */
+:root{
+  --navbar-height: 78px;
+  --sidebar-width: 235px;
+}
+
+/* Prevent accidental horizontal scrolling and ensure consistent box-sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .navbar-brand {
@@ -19,16 +40,22 @@
 .vertical-navbar {
     display: flex;
     flex-direction: column;
-    width: 235px;
+    width: var(--sidebar-width);
     background: #e3e3e3;
     padding: 1rem;
-    padding-top: 1.5rem;
+    position: fixed;
+    top: var(--navbar-height);
+    left: 0;
+    bottom: 0;
+    overflow: auto;
+    box-shadow: 2px 0 6px rgba(0,0,0,0.04);
 }
 
 .vertical-navbar .nav-link {
     color: #333;
     padding: 0.5rem 0.5rem;
-    margin-top: 0.7rem;
+    margin: 0.4rem;
+    margin-left: 1rem;
     text-decoration: none;
 }
 
@@ -43,20 +70,26 @@
   opacity: 0.95;
 }
 
-@media (max-width: 576px) {
+@media (max-width: 768px) {
+
+  :root{
+    --navbar-height: 60px; /* adjust to real mobile height */
+  }
+
   .navbar {
-    min-height: 35px; 
+    height: 60px; 
     padding: 0.2rem 0.4rem; 
   }
+
   .navbar-nav .nav-link {
     font-size: 1.1rem;
   }
+
   .navbar-brand {
     font-size: 1.5rem;
   }
 }
 
-/* Center login form */
 .mainbox{
   height: calc(100vh - 78px); 
 }
@@ -67,10 +100,15 @@ html, body {
   margin: 0;
 }
 
+.body{
+  margin-top: var(--navbar-height);
+}
+
 .content-area{
   flex: 1 1 auto;
   display: flex;
   padding: 25px;
+  margin-left: var(--sidebar-width);
 }
 
 /* Full viewport centering for login/register pages */
@@ -112,6 +150,7 @@ html, body {
 #Main_page{
   display: flex;
   width: 100%;
+  padding-top: 1.5rem;
 }
 
 #search-box{
@@ -121,7 +160,7 @@ html, body {
   margin-left: 0; 
 }
 
-@media (max-width: 576px){
+@media (max-width: 768px){
   #search-box{ 
     width: 100%;
     min-width: unset; 
@@ -174,6 +213,19 @@ html, body {
   text-align: left;
 }
 
-@media (max-width: 768px){
-  .tops-block{ margin-bottom: 12px; }
+@media (max-width: 768px) {
+  :root{
+    --sidebar-width: 125px;
+  }
+
+  .vertical-navbar{
+    width: var(--sidebar-width);
+    padding: 0.5rem;
+  }
+
+  .vertical-navbar .nav-link{
+    margin-left: 0.4rem;
+    font-size: 1rem;
+    text-align: left;
+  }
 }

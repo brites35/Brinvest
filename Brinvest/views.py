@@ -97,6 +97,8 @@ def stocks_data(request):
         a = s.asset
         data.append({
             'symbol': a.symbol,
-            'price': float(a.price) if a.price is not None else None
+            'price': float(a.price) if a.price is not None else None,
+            'name': a.name,
+            'market_cap': a.market_cap,
         })
     return JsonResponse(data, safe=False)

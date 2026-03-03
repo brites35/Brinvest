@@ -12,7 +12,7 @@
     <body>
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="{% url 'index' %}">Brinvest</a>
+            <label class="navbar-brand">Brinvest</label>
             <ul class="navbar-nav ml-auto d-flex flex-row">
                 {% if user.is_authenticated %}
                     <li class="nav-item">
@@ -38,13 +38,13 @@
         <div class="mainbox" style="display: flex; gap: 20px;">
 
             <nav class="vertical-navbar">
+                <a class="nav-link" href="{% url 'index' %}">Home</a>
                 <label class="nav-link" id="stocks_button">Stocks</label>
-                <label class="nav-link" id="etfs_button">ETFs</label>
+                <label class="nav-link" id="news_button">News</label>
                 {% if user.is_authenticated %}
                     <label class="nav-link" id="watchlist_button">Wacthlist</label>
                 {% endif %}
                 <label class="nav-link" id="currency_button">Currency Converter</label>
-                <label class="nav-link" id="news_button">News</label>
             </nav>
 
 

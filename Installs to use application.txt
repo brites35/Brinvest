@@ -1,0 +1,6 @@
+Python
+Git
+VSCode
+Django
+pip install finnhub-python
+pip install python-dotenv
