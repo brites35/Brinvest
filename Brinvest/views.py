@@ -69,6 +69,9 @@ def register(request):
 def stocks_view(request):
     return render(request, "Brinvest/index.html")
 
+def stock_detail_view(request, symbol):
+    return render(request, "Brinvest/index.html")
+
 def etfs_view(request):
     return render(request, "Brinvest/index.html")
 

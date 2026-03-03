@@ -10,20 +10,23 @@
     z-index: 1030;
 }
 
-/* layout variables */
 :root{
-  --navbar-height: 78px;
+  --navbar-height: 50px;
   --sidebar-width: 235px;
 }
 
-/* Prevent accidental horizontal scrolling and ensure consistent box-sizing */
+/* Prevent accidental horizontal scrolling */
 *, *::before, *::after {
   box-sizing: border-box;
 }
 
 html, body {
+  height: 100%;
+  margin: 0;
   max-width: 100%;
   overflow-x: hidden;
+  padding-top: var(--navbar-height);
+  scroll-margin-top: var(--navbar-height);
 }
 
 .navbar-brand {
@@ -43,6 +46,7 @@ html, body {
     width: var(--sidebar-width);
     background: #e3e3e3;
     padding: 1rem;
+    padding-top: 4rem;
     position: fixed;
     top: var(--navbar-height);
     left: 0;
@@ -70,38 +74,8 @@ html, body {
   opacity: 0.95;
 }
 
-@media (max-width: 768px) {
-
-  :root{
-    --navbar-height: 60px; /* adjust to real mobile height */
-  }
-
-  .navbar {
-    height: 60px; 
-    padding: 0.2rem 0.4rem; 
-  }
-
-  .navbar-nav .nav-link {
-    font-size: 1.1rem;
-  }
-
-  .navbar-brand {
-    font-size: 1.5rem;
-  }
-}
-
 .mainbox{
-  height: calc(100vh - 78px); 
-}
-
-/* Ensure base elements take full height and avoid double 100vh causing scroll */
-html, body {
-  height: 100%;
-  margin: 0;
-}
-
-.body{
-  margin-top: var(--navbar-height);
+  height: calc(100vh)-80px; 
 }
 
 .content-area{
@@ -140,31 +114,16 @@ html, body {
   border-color: #000 !important;
 }
 
-@media (max-width: 576px) {
-  .login-box {
-    padding: 1rem;
-    max-width: 95%;
-  }
-}
-
 #Main_page{
   display: flex;
   width: 100%;
-  padding-top: 1.5rem;
 }
 
 #search-box{
-  min-width: 300px;
-  width: 30%;
+  min-width: 450px;
+  width: 35%;
   box-sizing: border-box;
   margin-left: 0; 
-}
-
-@media (max-width: 768px){
-  #search-box{ 
-    width: 100%;
-    min-width: unset; 
-  }
 }
 
 #stock-search-input{
@@ -177,7 +136,6 @@ html, body {
   margin-top: 50px;
 }
 
-
 .tops-row{
   display: flex;
   gap: 20px;
@@ -187,14 +145,6 @@ html, body {
   font-size: 1.8rem;
   flex: 1 1 0;      
   text-align: left;
-}
-
-@media (max-width: 768px){
-  .tops-row{
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .tops-row > h2{ text-align: left;}
 }
 
 .tops-block{
@@ -213,9 +163,30 @@ html, body {
   text-align: left;
 }
 
+@media (max-width: 576px) {
+  .login-box {
+    padding: 1rem;
+    max-width: 95%;
+  }
+}
+
 @media (max-width: 768px) {
   :root{
+    --navbar-height: 35px;
     --sidebar-width: 125px;
+  }
+
+  .navbar {
+    height: 60px; 
+    padding: 0.2rem 0.4rem; 
+  }
+
+  .navbar-nav .nav-link {
+    font-size: 1.1rem;
+  }
+
+  .navbar-brand {
+    font-size: 1.5rem;
   }
 
   .vertical-navbar{
@@ -228,4 +199,25 @@ html, body {
     font-size: 1rem;
     text-align: left;
   }
+
+  .tops-row{
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .tops-row > h2{ text-align: left;}
+
+  .content-area{
+    padding: 10px;
+    margin-left: var(--sidebar-width);
+  }
+
+  .top_title{
+    font-size: 1rem;
+  }
+
+  #search-box{ 
+    width: 90%;
+    min-width: unset; 
+  }
+
 }
