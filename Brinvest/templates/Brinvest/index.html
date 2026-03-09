@@ -4,34 +4,37 @@
 {% block body %}
     <div id="Main_page" style="display: block;">
 
-        <div id="search-box">
-            <h2>Search for Stocks</h2>
-            <input type="text" id="stock-search-input" placeholder="Search for stocks...">
+        <div class="search-box">
+            <h2 class="Title_search">Search for Stocks</h2>
+            <input type="text" class="stock-search-input" placeholder="Search for stocks...">
         </div>
 
-        <div id="tops_container">
+        <div style=" margin-top: 50px;" id="tops_container">
             <div class="tops-row">
                 <div class="tops-block" id="Stocks-block">
-                    <h2>Top Stocks</h2>
-                    <table class="tops-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 25%;">Symbol</th>
-                                <th>Name</th>
-                                <th>Price($)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- rows will be injected here -->
-                        </tbody>
-                    </table>
+                    <h2 class="Title_search">Top Stocks</h2>
+                    <div class="table-wrapper">
+                        <table class="tops-table">
+                            <thead>
+                                <tr>
+                                    <th>Symbol</th>
+                                    <th>Name</th>
+                                    <th>Price($)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- rows will be injected here -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div class="tops-block" id="Rated-block">
-                    <h2>Best Rated Stocks</h2>
-                    <table class="tops-table">
+                    <h2 class="Title_search">Best Rated Stocks</h2>
+                    <div class="table-wrapper">
+                        <table class="tops-table">
                         <thead>
                             <tr>
-                                <th style="width: 25%;">Symbol</th>
+                                <th>Symbol</th>
                                 <th>Name</th>
                                 <th>Score(0-5)</th>
                             </tr>
@@ -40,6 +43,7 @@
                             <!-- rows will be injected here -->
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -48,6 +52,35 @@
     </div>
 
     <div id="Stocks_page" style="display: none;">
+
+        <div class="search-box">
+            <h2 class="Title_search">Search for Stocks</h2>
+            <input type="text" class="stock-search-input" placeholder="Search for stocks...">
+        </div>
+
+        <div style=" margin-top: 50px;" id="stocks_container">
+            <div class="tops-row">
+                <div class="tops-block" id="Stocks-block">
+                    <h2 class="Title_search">All Stocks</h2>
+                    <div class="table-wrapper">
+                        <table class="tops-table">
+                            <thead>
+                                <tr>
+                                    <th>Symbol</th>
+                                    <th>Name</th>
+                                    <th>Price($)</th>
+                                    <th>P/E Ratio</th>
+                                    <th>Market Cap</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- rows will be injected here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 

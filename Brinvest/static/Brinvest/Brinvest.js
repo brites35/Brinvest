@@ -20,13 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Back / Forward browser buttons
     window.addEventListener('popstate', router);
 
-    // Run router on initial load (VERY IMPORTANT)
+    // Run router on initial load for loading correct page when user refreshes on a specific url like .com/stocks/AAPL
     router();
 });
-
-/* --------------------------
-   ROUTER
--------------------------- */
 
 function router(){
     const path = window.location.pathname;
@@ -35,7 +31,7 @@ function router(){
         load_stocks_page(false);
     }
 
-    else if (path.startsWith('/stock/')){
+    else if (path.startsWith('/stocks/')){
         const symbol = path.split('/')[2];
         load_stock_page(symbol, false);
     }
@@ -57,11 +53,6 @@ function router(){
     }
 }
 
-
-/* --------------------------
-   PAGE LOADERS
--------------------------- */
-
 function hideAllPages(){
     ['Main_page','Stocks_page','Stock_page','Watchlist_page','Currency_page','News_page']
     .forEach(id => {
@@ -82,8 +73,6 @@ function setActiveNav(activeId){
     if (active) active.style.background = '#c7c7c7';
 }
 
-/* HOME */
-
 function load_home_page(push=true){
     hideAllPages();
     const main = document.getElementById('Main_page');
@@ -98,26 +87,19 @@ function load_home_page(push=true){
     populateTopStocks();
 }
 
-/* STOCK LIST */
-
 function load_stocks_page(push=true){
     hideAllPages();
-    const main = document.getElementById('Main_page');
-    if (main) main.style.display = 'block';
-    const tops = document.getElementById('tops_container');
-    if (tops) tops.style.display = 'none';
-    
+
     const stocksPage = document.getElementById('Stocks_page');
     if (stocksPage) stocksPage.style.display = 'block';
 
     setActiveNav('stocks_button');
-
+    
     if (push){
         history.pushState({}, '', '/stocks');
     }
+    populateTopStocks('stocks');
 }
-
-/* SINGLE STOCK */
 
 function load_stock_page(symbol, push=true){
     hideAllPages();
@@ -128,7 +110,7 @@ function load_stock_page(symbol, push=true){
     setActiveNav('stocks_button');
 
     if (push){
-        history.pushState({}, '', '/stock/' + symbol);
+        history.pushState({}, '', '/stocks/' + symbol);
     }
 
     // Fetch stock data
@@ -145,8 +127,6 @@ function load_stock_page(symbol, push=true){
             console.error(err);
         });
 }
-
-/* OTHER PAGES */
 
 function load_currency_page(push=true){
     hideAllPages();
@@ -191,8 +171,14 @@ function load_news_page(push=true){
    API
 -------------------------- */
 
-function populateTopStocks(){
-    const tbody = document.querySelector('#tops_container .tops-block#Stocks-block .tops-table tbody');
+function populateTopStocks(page='home'){
+    let tbody = document.querySelector('#tops_container .tops-block#Stocks-block .tops-table tbody');
+    let num_stocks = 15;
+    if (page == 'stocks'){
+        tbody = document.querySelector('#stocks_container .tops-block#Stocks-block .tops-table tbody');
+        num_stocks = 0;
+    }
+
     if (!tbody) return;
 
     tbody.innerHTML = '<tr><td colspan="3">Loading…</td></tr>';
@@ -211,19 +197,23 @@ function populateTopStocks(){
 
             tbody.innerHTML = '';
 
-            arr.slice(0, 15).forEach(item => {
+            (num_stocks == 0 ? arr: arr.slice(0, num_stocks)).forEach(item => {
 
                 const symbol = item.symbol || '';
                 const name = item.name || '';
                 const price = item.price ? Number(item.price).toFixed(2) : '';
 
                 const tr = document.createElement('tr');
-                tr.innerHTML =`<td style="width:20%"><span class="stock-text"style="cursor:pointer; text-decoration:underline">${symbol}</span></td><td>${name}</td><td>${price}</td>`;
+                if (page == 'stocks'){
+                    tr.innerHTML =`<td style="width:10%"><span class="stock-text"style="cursor:pointer; text-decoration:underline">${symbol}</span></td><td style="width:30%">${name}</td></td><td style="width:10%">${price}</td><td style="width:25%">P/E RATIO</td></td><td style="width:25%">Market Cap</td>`;
+                }else if (page == 'home'){
+                    tr.innerHTML =`<td style="width:20%"><span class="stock-text"style="cursor:pointer; text-decoration:underline">${symbol}</span></td><td style="width:50%">${name}</td><td style="width:30%">${price}</td>`;
+                }
+                
 
                 tbody.appendChild(tr);
 
-                tr.querySelector('.stock-text')
-                  .addEventListener('click', () => load_stock_page(symbol));
+                tr.querySelector('.stock-text').addEventListener('click', () => load_stock_page(symbol));
             });
 
         })

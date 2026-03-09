@@ -1,5 +1,5 @@
 .navbar{
-    padding: 0.6rem 1.4rem;
+    padding: 0.2rem 1.2rem;
     font-weight: 400;
     background-color: #b8b8b8 !important;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -12,7 +12,7 @@
 
 :root{
   --navbar-height: 50px;
-  --sidebar-width: 235px;
+  --sidebar-width: min(18vw, 230px);
 }
 
 /* Prevent accidental horizontal scrolling */
@@ -23,14 +23,12 @@
 html, body {
   height: 100%;
   margin: 0;
-  max-width: 100%;
-  overflow-x: hidden;
   padding-top: var(--navbar-height);
-  scroll-margin-top: var(--navbar-height);
+  overflow-x: hidden;
 }
 
 .navbar-brand {
-    font-size: 2rem;
+    font-size: 2.3rem;
     font-weight: 500;
 }
 
@@ -41,12 +39,11 @@ html, body {
 }
 
 .vertical-navbar {
-    display: flex;
     flex-direction: column;
     width: var(--sidebar-width);
     background: #e3e3e3;
-    padding: 1rem;
-    padding-top: 4rem;
+    padding: 0.7rem;
+    padding-top: 3.2rem;
     position: fixed;
     top: var(--navbar-height);
     left: 0;
@@ -74,15 +71,13 @@ html, body {
   opacity: 0.95;
 }
 
-.mainbox{
-  height: calc(100vh)-80px; 
-}
-
 .content-area{
   flex: 1 1 auto;
   display: flex;
-  padding: 25px;
+  flex-direction: column;
+  padding: 8px;
   margin-left: var(--sidebar-width);
+  overflow-x: hidden;
 }
 
 /* Full viewport centering for login/register pages */
@@ -114,26 +109,28 @@ html, body {
   border-color: #000 !important;
 }
 
-#Main_page{
+#Main_page, #Stocks_page{
   display: flex;
   width: 100%;
 }
 
-#search-box{
+.search-box{
   min-width: 450px;
   width: 35%;
+  padding: 10px;
   box-sizing: border-box;
-  margin-left: 0; 
 }
 
-#stock-search-input{
+.stock-search-input{
   width: 100%;
   height: 35px;
   box-sizing: border-box;
 }
 
-#tops_container{
-  margin-top: 50px;
+.table-wrapper {
+    width: 100%;      
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .tops-row{
@@ -141,7 +138,7 @@ html, body {
   gap: 20px;
 }
 
-.tops-row > h2{
+.Title_search{
   font-size: 1.8rem;
   flex: 1 1 0;      
   text-align: left;
@@ -154,11 +151,13 @@ html, body {
 
 .tops-table{
   width: 100%;
+  min-width: 330px;
   border-collapse: collapse;
   margin-top: 20px;
 }
 .tops-table th, .tops-table td{
   padding: 8px 6px;
+  font-size: 1rem;
   border-bottom: 1px solid #eee;
   text-align: left;
 }
@@ -168,36 +167,70 @@ html, body {
     padding: 1rem;
     max-width: 95%;
   }
+
+  .navbar-brand {
+    font-size: 1.7rem;
+    margin: 0;
+  }
+  
+  .content-area {
+      padding: 2px;
+      margin-left: var(--sidebar-width);
+  }
+
+  .table-wrapper {
+      overflow-x: auto;
+  }
+
+  .tops-table {
+      min-width: 330px;
+  }
+
+  .stock-search-input{
+    height: 28px;
+  }
+
+  .tops-table th, .tops-table td{
+    padding: 6px 4px;
+    font-size: 0.7rem;
+  }
+
+  .Title_search{
+    font-size: 1.3rem;
+  }
+
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+  
   :root{
     --navbar-height: 35px;
-    --sidebar-width: 125px;
+    --sidebar-width:  max(16vw, 120px);
   }
 
   .navbar {
-    height: 60px; 
-    padding: 0.2rem 0.4rem; 
+    height: 70px; 
+    padding: 0.01rem 0.5rem; 
   }
 
   .navbar-nav .nav-link {
-    font-size: 1.1rem;
-  }
-
-  .navbar-brand {
-    font-size: 1.5rem;
+    font-size: 1rem;
   }
 
   .vertical-navbar{
     width: var(--sidebar-width);
-    padding: 0.5rem;
+    margin-top: 2rem;
+    padding: 0.4rem;
   }
 
   .vertical-navbar .nav-link{
     margin-left: 0.4rem;
     font-size: 1rem;
     text-align: left;
+  }
+
+  .stock-search-input{
+    width: max(80%, 250px);
   }
 
   .tops-row{
@@ -207,15 +240,12 @@ html, body {
   .tops-row > h2{ text-align: left;}
 
   .content-area{
-    padding: 10px;
+    padding: 5px;
     margin-left: var(--sidebar-width);
   }
 
-  .top_title{
-    font-size: 1rem;
-  }
 
-  #search-box{ 
+  .search-box{ 
     width: 90%;
     min-width: unset; 
   }
