@@ -1,4 +1,7 @@
 
+I created Router() on javascript, so when direct link is used like .com/stocks it goes to the correct page. Because it's a Single-Page Application and it would just go to home page independent of the link.
+
+
 
 
 

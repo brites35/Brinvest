@@ -9,44 +9,34 @@ class User(AbstractUser):
 
 
 class Asset(models.Model):
-
-    symbol = models.CharField(max_length=10, unique=True)
+    symbol = models.CharField(max_length=10, unique=True, primary_key=True)
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=20, decimal_places=4, null=True, blank=True)
     last_updated = models.DateTimeField(null=True, blank=True)
     market_cap = models.BigIntegerField(null=True, blank=True)
     pe_ratio = models.FloatField(null=True, blank=True)
+    shares_outs = models.BigIntegerField(null=True, blank=True)
     dividend_yield = models.FloatField(null=True, blank=True)
+    exchange = models.CharField(max_length=50, null=True, blank=True)
+    watchlist = models.ManyToManyField("Watchlist", related_name="assets_in_watchlists", blank=True)
 
     def __str__(self):
         return f"{self.name} ({self.symbol})"
     
-
-class Stock(models.Model):
-
-    asset = models.OneToOneField(Asset, on_delete=models.CASCADE, related_name='stock_profile')
-    sector = models.CharField(max_length=100, null=True, blank=True)
-    stock_type = models.CharField(max_length=100, null=True, blank=True)
-
+class Watchlist(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="watchlists")
+    name = models.CharField(max_length=100, default="My Watchlist")
+    assets = models.ManyToManyField(Asset, related_name="in_watchlists", blank=True)
 
     def __str__(self):
-        return f"Stock: {self.asset.symbol}"
+        return f"{self.name} ({self.user.username})"
 
-class ETF(models.Model):
-
-    asset = models.OneToOneField(Asset, on_delete=models.CASCADE, related_name='etf_profile')
-    expense_ratio = models.DecimalField(max_digits=6, decimal_places=4, null=True, blank=True)
-    dividend_policy = models.CharField(max_length=100, null=True, blank=True)
-
-    def __str__(self):
-        return f"ETF: {self.asset.symbol}"
-
-
-class ETFComponent(models.Model):
-
-    etf = models.ForeignKey(ETF, on_delete=models.CASCADE, related_name='components')
-    stock = models.ForeignKey(Stock, on_delete=models.CASCADE, related_name='etf_components')
-    percentage = models.DecimalField(max_digits=5, decimal_places=2, help_text='Percentage weight (0-100)')
+class News(models.Model):
+    asset = models.ForeignKey(Asset, on_delete=models.CASCADE, related_name="news")
+    title = models.CharField(max_length=255)
+    url = models.URLField()
+    published_at = models.DateTimeField()
+    image_url = models.URLField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.stock.symbol} {self.percentage}% in {self.etf.asset.symbol}"
+        return f"{self.title} ({self.asset.symbol})"

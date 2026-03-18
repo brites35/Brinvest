@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.conf import settings
 from django.db import transaction
 
-from Brinvest.models import Asset, Stock
+from Brinvest.models import Asset
 import finnhub
 
 logger = logging.getLogger(__name__)
@@ -32,10 +32,10 @@ finnhub_client = finnhub.Client(api_key=settings.FINNHUB_API_KEY)
 # SAFE FINNHUB CALL WITH RETRIES
 # --------------------------------------------------
 
-def safe_finnhub_call(func, **kwargs):
+def safe_finnhub_call(func, *args, **kwargs):
     for attempt in range(MAX_RETRIES):
         try:
-            return func(**kwargs)
+            return func(*args, **kwargs)
         except Exception as e:
             logger.warning("Finnhub error (%s). Retry %d/%d",
                            str(e), attempt + 1, MAX_RETRIES)
@@ -52,6 +52,9 @@ def fetch_profile(symbol):
     data = safe_finnhub_call(finnhub_client.company_profile2, symbol=symbol)
     return symbol, data or {}
 
+def fetch_financials(symbol):
+    data = safe_finnhub_call(finnhub_client.company_basic_financials, symbol=symbol, metric='all')
+    return symbol, data or {}
 
 # --------------------------------------------------
 # MANAGEMENT COMMAND
@@ -95,6 +98,15 @@ class Command(BaseCommand):
                     results.append(future.result())
 
             # -----------------------------
+            # FETCH FINANCIALS
+            # -----------------------------
+            financials = {}
+
+            for sym in symbols:
+                _, fin = fetch_financials(sym)
+                financials[sym] = fin
+
+            # -----------------------------
             # FETCH PROFILES (ONLY IF NEEDED)
             # -----------------------------
             need_profiles = [
@@ -103,6 +115,8 @@ class Command(BaseCommand):
                 or not existing_assets[sym].name
                 or existing_assets[sym].name == sym
                 or existing_assets[sym].market_cap is None
+                or existing_assets[sym].shares_outs is None
+                or existing_assets[sym].exchange is None
             ]
 
             profiles = {}
@@ -130,17 +144,33 @@ class Command(BaseCommand):
                 profile = profiles.get(sym, {})
                 name = profile.get("name") or sym
                 marketCap = profile.get("marketCapitalization")
+                exchange = profile.get("exchange")
+                raw_shares_outs = financials.get(sym, {}).get("metric", {}).get("sharesOutstanding") or profile.get("sharesOutstanding")
+
+                shares_outs = None
+                if raw_shares_outs:
+                    try:
+                        shares_outs = int(float(raw_shares_outs))
+                    except (ValueError, TypeError):
+                        shares_outs = None
 
                 if sym in existing_assets:
                     asset = existing_assets[sym]
                     asset.price = price
                     asset.last_updated = timezone.now()
+                    asset.pe_ratio = financials.get(sym, {}).get("metric", {}).get("peBasicExclExtraTTM")
 
                     if asset.name == asset.symbol:
                         asset.name = name
 
                     if asset.market_cap is None:
                         asset.market_cap = marketCap
+
+                    if asset.shares_outs is None:
+                        asset.shares_outs = shares_outs
+
+                    if asset.exchange is None:
+                        asset.exchange = exchange
 
                     to_update.append(asset)
                 else:
@@ -150,7 +180,10 @@ class Command(BaseCommand):
                             name=name,
                             market_cap=marketCap,
                             price=price,
-                            last_updated=timezone.now()
+                            last_updated=timezone.now(),
+                            shares_outs=financials.get(sym, {}).get("metric", {}).get("sharesOutstanding") or profile.get("sharesOutstanding"),
+                            exchange=exchange,
+                            pe_ratio = financials.get(sym, {}).get("metric", {}).get("peBasicExclExtraTTM")
                         )
                     )
 
@@ -161,18 +194,11 @@ class Command(BaseCommand):
                 if to_create:
                     Asset.objects.bulk_create(to_create)
 
-                    created_assets = Asset.objects.filter(
-                        symbol__in=[a.symbol for a in to_create]
-                    )
-
-                    Stock.objects.bulk_create(
-                        [Stock(asset=a) for a in created_assets]
-                    )
 
                 if to_update:
                     Asset.objects.bulk_update(
                         to_update,
-                        ["price", "last_updated", "name", "market_cap"]
+                        ["price", "last_updated", "name", "market_cap", "pe_ratio", "shares_outs", "exchange"]
                     )
 
             duration = round(time.time() - start_time, 2)

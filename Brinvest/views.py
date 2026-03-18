@@ -1,10 +1,11 @@
+import json
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.conf import settings
-from .models import User, Asset, Stock, ETF, ETFComponent
+from .models import User, Asset, News
 import finnhub
 
 finnhub_client = finnhub.Client(api_key=settings.FINNHUB_API_KEY)
@@ -70,6 +71,45 @@ def stocks_view(request):
     return render(request, "Brinvest/index.html")
 
 def stock_detail_view(request, symbol):
+    
+    if request.method == "PUT":
+        if not request.user.is_authenticated:
+            return JsonResponse({"error": "Not logged in"}, status=403)
+        
+        try:
+            body = json.loads(request.body)
+            should_watch = body.get("watch")
+            
+            asset = Asset.objects.get(symbol=symbol)
+            
+            if should_watch:
+                request.user.wacth_list.add(asset) # Using your typo'd field name
+            else:
+                request.user.wacth_list.remove(asset)
+                
+            return JsonResponse({"is_watched": should_watch})
+        except Asset.DoesNotExist:
+            return JsonResponse({"error": "Asset not found"}, status=404)
+        
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest' or request.GET.get('format') == 'json':
+        try:
+            a = Asset.objects.get(symbol=symbol)
+            is_watched = False
+            if request.user.is_authenticated:
+                is_watched = request.user.wacth_list.filter(symbol=symbol).exists()
+            
+            return JsonResponse({
+                'symbol': a.symbol,
+                'name': a.name,
+                'price': float(a.price) if a.price else None,
+                'market_cap': a.market_cap,
+                'pe_ratio': a.pe_ratio,
+                'exchange': a.exchange,
+                'is_watched': is_watched
+            })
+        except Asset.DoesNotExist:
+            return JsonResponse({"error": "Not found"}, status=404)
+
     return render(request, "Brinvest/index.html")
 
 def etfs_view(request):
@@ -93,15 +133,23 @@ def stocks_data(request):
     if request.method != 'GET':
         return JsonResponse({'error': 'Method not allowed'}, status=405)
 
-    # Query Stock and include related Asset to access asset fields efficiently
-    qs = Stock.objects.select_related('asset').order_by('-asset__market_cap')[:50]
+    # Query Assets and its informations
+    qs = Asset.objects.order_by('-market_cap')[:50]
+
+    watched_symbols = []
+    if request.user.is_authenticated:
+        watched_symbols = request.user.wacth_list.values_list('symbol', flat=True)
+
     data = []
-    for s in qs:
-        a = s.asset
+    for a in qs:
         data.append({
             'symbol': a.symbol,
             'price': float(a.price) if a.price is not None else None,
             'name': a.name,
             'market_cap': a.market_cap,
+            'pe_ratio': a.pe_ratio,
+            'shares_outs': a.shares_outs,
+            'exchange': a.exchange,
+            'is_watched': a.symbol in watched_symbols
         })
     return JsonResponse(data, safe=False)

@@ -10,6 +10,18 @@
     z-index: 1030;
 }
 
+.star-filled {
+    width: 43px;
+    height: 38px;
+    filter: drop-shadow(0px 0px 2px rgba(0,0,0,0.2));
+}
+
+.star-empty {
+    width: 39px;
+    height: 28px;
+    opacity: 0.7;
+}
+
 :root{
   --navbar-height: 50px;
   --sidebar-width: min(18vw, 230px);
@@ -112,6 +124,13 @@ html, body {
 #Main_page, #Stocks_page{
   display: flex;
   width: 100%;
+
+}
+
+#Stock_page{
+  padding: 35px;
+  width: 100%;
+  display: flex;
 }
 
 .search-box{
@@ -173,6 +192,18 @@ html, body {
     margin: 0;
   }
   
+  .star-filled {
+    width: 21px;
+    height: 17px;
+    filter: drop-shadow(0px 0px 2px rgba(0,0,0,0.2));
+  }
+
+  .star-empty {
+      width: 18px;
+      height: 15px;
+      opacity: 0.7;
+  }
+
   .content-area {
       padding: 2px;
       margin-left: var(--sidebar-width);
